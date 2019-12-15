@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+ <html>
+     <head>
+         <meta charset="UTF-8">
+         <title></title>
+         <script src="animate.js"></script>
+ 		<style>
+ 			*{
+ 			    padding:0;
+ 			    margin:0;
+ 			}
+ 			ul,li{
+ 			    list-style:none;
+ 			}
+ 			.head{
+ 				overflow: hidden;
+ 				top: 2px;
+ 				width: 800px;
+ 				height: 20px;
+ 				position: absolute;
+ 				left: 350px;
+ 			}
+ 			.head1{
+ 				width: 2000px;
+ 				height: 23px;
+ 			    background-color: #ccc;
+ 			    
+ 			}
+ 			.imgs{
+ 				left: 260px;
+ 				top: 3px;
+ 				position: absolute;
+ 			}
+ 			.w{
+ 				width: 370px;
+ 				right: -270px;
+ 				position:absolute;
+ 			}
+ 			.box{
+ 			    width:1200px;
+ 			    height:395px;
+ 			    border:1px solid red;
+ 			    margin:100px auto;
+ 			    position: relative;
+ 			    overflow:hidden;
+ 			    top:-100px;
+ 			}
+ 			.slider{
+ 			    width:8400px;
+ 			    position:absolute;
+ 			    left:-1200px;
+ 			}
+ 			.slide{
+ 			    width:1200px;
+ 			    float:left;
+ 			}
+ 			.box>span{
+ 			    display: block;
+ 			    width:30px;
+ 			    height: 50px;
+ 			    text-align: center;
+ 			    cursor:pointer;
+ 			    top:175px;
+ 			    line-height: 50px;
+ 			    background: rgb(255,0,0);
+ 			    font-size: 30px;
+ 			    position: absolute;
+ 			    opacity: 0;
+ 			}
+ 			#left{
+ 			    top: 220px;
+ 			    left:30px;
+ 			
+ 			}
+ 			#right{
+ 			    top: 220px;
+ 			    right: 30px;
+ 			}
+ 			.nav{
+ 			    position: absolute;
+ 			    left:520px;
+ 			    bottom:20px;
+ 			}
+ 			.nav>li{
+ 			    float:left;
+ 			    width: 20px;
+ 			    height: 20px;
+ 			    background: #ccc;
+ 			    cursor: pointer;
+ 			    margin: 0 10px;
+ 			    border-radius: 50%;
+ 			    float: left;
+ 			}
+ 			.nav .active{
+ 			    background:red;
+ 			}
+				
+			.box img{
+				width: 1200px;
+				height: 400px;
+			}
+ 
+ 		</style>
+     </head>
+     <body>    
+         <div class="head1" >
+                 <div class="imgs"><img src="imgs/a15.png"></div>
+                 <div class="head" id="head">
+                     <div class="w" id="w1"><p style="color:red;font-size:14px">[温馨提示]最近有不少不法分子在网上骗人，请大家注意!!!</p ></div>
+               </div>
+         </div>
+         <div id="box" class="box">
+             <div class="slider" id="slider">                        
+                 <div class="slide"><img src="imgs/b5.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b1.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b2.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b3.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b4.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b5.png"  alt=""></div>
+                 <div class="slide"><img src="imgs/b1.png"  alt=""></div>
+             </div>
+             <span id="left"></span>
+             <span id="right"></span>
+             <ul class="nav" id="nav">
+                 <li class="active"></li>
+                 <li></li>
+                 <li></li>
+                 <li></li>
+                 <li></li>
+             </ul>
+         </div>
+ <script>
+            var box=document.getElementById("box");
+            var oNavlist=document.getElementById("nav").children;
+            var slider=document.getElementById("slider");
+            var left=document.getElementById("left");
+            var right=document.getElementById("right");
+            var index=1;
+            var timer;
+            var isMoving=false;
+            function gStyle(obj, style){
+             if(obj.currentStyle){
+                 return obj.currentStyle[style];
+              } else {
+                   return getComputedStyle(obj)[style];
+              }
+          }
+          var w1 = document.getElementById("w1");
+          onload = function(){
+           var i = setInterval(function(){
+             var now = parseInt(gStyle(w1,"right"));
+             w1.style.right = now+1+"px";
+             if(now>=800){
+               w1.style.right=-270+"px";
+             }
+           },15)
+          }
+            function next(){
+                if(isMoving){
+                    return;
+                }
+                 isMoving=true;
+                 index++;
+                 navChange();
+                 animate(slider,{left:-1200*index},function(){
+                    if(index === 6){
+                        slider.style.left="-1200px";
+                        index=1;
+                    }
+                    isMoving=false;
+                });
+ 
+                }
+               
+            function prev(){
+             if(isMoving){
+                    return;
+                }
+                isMoving=true;
+                index--;
+                navChange();
+                animate(slider,{left:-1200*index},function(){
+                    if(index ===0){
+                        slider.style.left="-6000px";
+                        index=5;
+                    }
+                    isMoving=false;
+                });
+            }
+            var timer=setInterval(next,3000);
+			right.onclick=next;
+			left.onclick=prev;
+            box.onmouseover=function(){
+                animate(left,{opacity:50});
+                animate(right,{opacity:50});
+                clearInterval(timer);
+            }
+            box.onmouseout=function(){
+                animate(left,{opacity:0});
+                animate(right,{opacity:0});
+                timer=setInterval(next,3000);
+            }
+            for(var i=0;i<oNavlist.length;i++){
+             oNavlist[i].idx=i;
+             oNavlist[i].onclick=function(){
+                 index=this.idx+1;
+                 animate(slider,{left:-1200*index});
+             }
+            }
+            function navChange(){
+                for(var i=0;i<oNavlist.length;i++){
+                 oNavlist[i].className=" ";
+                }
+                if(index===6){
+                 oNavlist[0].className="active";
+                }else if(index===0){
+                 oNavlist[4].className="active";
+                }else{
+                 oNavlist[(index-1+5)%5].className="active";
+                }
+            }
+        </script>
+     </body>
+ </html>
